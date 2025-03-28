@@ -1,0 +1,32 @@
+:root {
+  --font-color: rgb(180, 180, 180);
+  --bg-color: rgb(20, 20, 20);
+  --bd-color: rgb(180, 180, 180);
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Lora", serif;
+}
+
+button {
+  background: none;
+  border: 1px solid var(--bd-color);
+  color: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+a {
+  color: inherit;
+}
+
+input {
+  background: none;
+  outline: none;
+  border: 1px solid var(--bd-color);
+  color: inherit;
+}
