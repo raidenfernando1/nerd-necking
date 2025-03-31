@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router";
+import Navbar from "../components/Navbar";
 
 const Container = {
   Container: styled.div`
@@ -12,17 +13,6 @@ const Container = {
     display: flex;
     flex-direction: column;
     justify-content: center;
-  `,
-  Buttons: styled.div`
-    margin-top: 50px;
-    padding-top: 10px;
-    border-top: 1px solid var(--bd-color);
-    display: flex;
-    gap: 20px;
-
-    > button {
-      padding: 5px 20px;
-    }
   `,
   Quotes: styled.div`
     display: flex;
@@ -43,12 +33,14 @@ const Home = () => {
           </p>
           <p>"Not even i can see your messages - Raiden"</p>
         </Container.Quotes>
-        <Container.Buttons>
-          <Link to="/register">REGISTER</Link>
-          <Link to="/login">LOGIN</Link>
-          <Link to="/safety">SAFETY</Link>
-          <Link to="/about">ABOUT</Link>
-        </Container.Buttons>
+        <Navbar
+          navItems={[
+            { name: "Register", path: "/register" },
+            { name: "Login", path: "/login" },
+            { name: "Safety", path: "/safety" },
+            { name: "About", path: "/about" },
+          ]}
+        />
       </Container.Left>
     </Container.Container>
   );

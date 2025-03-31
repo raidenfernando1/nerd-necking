@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Link } from "react-router";
+import Navbar from "../components/Navbar";
 
 const Container = {
   Container: styled.main`
@@ -17,25 +17,28 @@ const Container = {
     flex-direction: column;
     gap: 10px;
   `,
-  Input: styled.div`
-    > input {
-      width: 50%;
-      padding: 5px 10px;
-      font-size: 1rem;
-    }
+  Input: styled.input`
+    border: 0px solid;
+    border-bottom: 1px solid var(--bd-color);
+    width: 50%;
+    padding: 5px 0px;
+    font-size: 1rem;'
   `,
-  Buttons: styled.div`
-    margin-top: 50px;
-    padding-top: 10px;
-    border-top: 1px solid var(--bd-color);
+  CTA: styled.div`
     display: flex;
-    gap: 20px;
+    gap: 10px;
 
     > button {
-      padding: 5px 20px;
+      padding: 5px 10px;
     }
   `,
 };
+
+const navItems = [
+  { name: "Home", path: "/" },
+  { name: "About", path: "/about" },
+  { name: "Contact", path: "/contact" },
+];
 
 const Register = () => {
   const InputList = [
@@ -63,19 +66,18 @@ const Register = () => {
       <Container.Form>
         {InputList.map((input) => {
           return (
-            <Container.Input key={input.placeholder}>
+            <div key={input.placeholder}>
               <p>{input.label}</p>
-              <input placeholder={input.placeholder} />
-            </Container.Input>
+              <Container.Input placeholder={input.placeholder} />
+            </div>
           );
         })}
+        <Container.CTA>
+          <button type="submit">Submit</button>
+          <button type="reset">Reset</button>
+        </Container.CTA>
       </Container.Form>
-      <Container.Buttons>
-        <Link to="/">HOME</Link>
-        <Link to="/login">LOGIN</Link>
-        <Link to="/safety">SAFETY</Link>
-        <Link to="/about">ABOUT</Link>
-      </Container.Buttons>
+      <Navbar navItems={navItems} />
     </Container.Container>
   );
 };
