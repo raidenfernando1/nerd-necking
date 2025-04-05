@@ -3,6 +3,7 @@ import styled from "styled-components";
 import GithubLogo from "../assets/github.svg?react";
 import GoogleLogo from "../assets/google.svg?react";
 import SpotifyLogo from "../assets/spotify.svg?react";
+import { supabaseLogin } from "../store/Supabase";
 
 const Card = {
   Container: styled.button`
@@ -30,10 +31,11 @@ const LogoMap = {
 
 const LoginCard: React.FC<{
   name: string;
+  loginProvder: "github" | "spotify" | "google";
   logo: "github" | "spotify" | "google";
-}> = ({ name, logo }) => {
+}> = ({ name, loginProvder, logo }) => {
   return (
-    <Card.Container>
+    <Card.Container onClick={() => supabaseLogin(loginProvder)}>
       <Card.LogoWrapper>{LogoMap[logo] || ""}</Card.LogoWrapper>
       <p>{name}</p>
     </Card.Container>

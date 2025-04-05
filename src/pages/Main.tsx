@@ -3,6 +3,7 @@ import Home from "./Home";
 import Login from "./Login";
 import Safety from "./Safety";
 import About from "./About";
+import App from "./App";
 
 import { useEffect } from "react";
 import { Routes, Route } from "react-router";
@@ -43,6 +44,7 @@ const Main = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/app" element={<App />} />
         <Route path="/safety" element={<Safety />} />
         <Route path="/about" element={<About />} />
       </Routes>

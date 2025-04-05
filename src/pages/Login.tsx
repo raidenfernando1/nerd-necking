@@ -1,6 +1,11 @@
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import LoginCard from "../components/LoginCards";
+import useRedirect from "../hooks/useRedirect";
+
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+import useAuth from "../context/Auth";
 
 const Container = {
   Container: styled.main`
@@ -28,13 +33,27 @@ const Container = {
 };
 
 const Login = () => {
+  useRedirect("/app");
+
   return (
     <Container.Container>
       <h1>LOGIN NOW</h1>
       <Container.LoginCards>
-        <LoginCard logo="github" name="Login using Github." />
-        <LoginCard logo="google" name="Login using Google." />
-        <LoginCard logo="spotify" name="Login using Spotify." />
+        <LoginCard
+          logo="github"
+          name="Login using Github."
+          loginProvder="github"
+        />
+        <LoginCard
+          logo="google"
+          name="Login using Google."
+          loginProvder="google"
+        />
+        <LoginCard
+          logo="spotify"
+          name="Login using Spotify."
+          loginProvder="spotify"
+        />
       </Container.LoginCards>
       <Navbar
         navItems={[
