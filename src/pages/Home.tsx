@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Link } from "react-router";
 import Navbar from "../components/Navbar";
 
 const Container = {
@@ -13,6 +12,10 @@ const Container = {
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    @media (max-width: 700px) {
+      width: 100%;
+    }
   `,
   Quotes: styled.div`
     display: flex;
@@ -35,7 +38,6 @@ const Home = () => {
         </Container.Quotes>
         <Navbar
           navItems={[
-            { name: "Register", path: "/register" },
             { name: "Login", path: "/login" },
             { name: "Safety", path: "/safety" },
             { name: "About", path: "/about" },

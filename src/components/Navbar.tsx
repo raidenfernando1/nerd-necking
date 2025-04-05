@@ -7,8 +7,9 @@ const Nav = {
     margin-top: 50px;
     padding-top: 10px;
     border-top: 1px solid var(--bd-color);
-    display: flex;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 
     > a {
       padding: 5px 10px;
