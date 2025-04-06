@@ -16,6 +16,13 @@ const Nav = {
       border: 1px solid var(--bd-color);
       text-decoration: none;
     }
+
+    > button {
+      text-align: left;
+      padding: 5px 10px;
+      border: 1px solid var(--bd-color);
+      text-decoration: none;
+    }
   `,
 };
 
@@ -24,18 +31,30 @@ interface NavbarItem {
   path: string;
 }
 
-interface NavbarProps {
-  navItems: NavbarItem[];
+interface ButtonItem {
+  name: string;
+  onClick: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
+interface NavbarProps {
+  navItems: NavbarItem[];
+  buttonItems?: ButtonItem[];
+}
+
+const Navbar: React.FC<NavbarProps> = ({ navItems, buttonItems }) => {
   return (
     <Nav.Container>
-      {navItems.map((item, index) => (
-        <Link key={index} to={item.path}>
-          {item.name}
+      {navItems.map((link, index) => (
+        <Link key={index} to={link.path}>
+          {link.name}
         </Link>
       ))}
+      {buttonItems &&
+        buttonItems.map((button, index) => (
+          <button key={index} onClick={button.onClick}>
+            {button.name}
+          </button>
+        ))}
     </Nav.Container>
   );
 };
