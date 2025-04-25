@@ -1,71 +1,84 @@
 import styled from "styled-components";
-import useAuth from "../context/Auth";
-import QuestionCard from "../components/QuestionCard";
+import ProtectedRoute from "../hooks/useRedirect";
+import Navbar from "../components/Navbar";
 
-import { useNavigate } from "react-router";
+import { supabaseLogout, getUsername } from "../store/Supabase";
+import AppListener from "../hooks/AppListener";
 import { useEffect } from "react";
-import { supabaseLogout } from "../store/Supabase";
-
-const Container = {
-  Container: styled.div`
-    min-height: 100vh;
-    padding-top: 100px;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-  `,
-  Navbar: styled.nav`
-    position: fixed;
-    top: 0;
-    left: 0;
-    padding-inline: 10%;
-    width: 100%;
-    display: flex;
-    padding-block: 20px;
-    border-bottom: 1px solid var(--bd-color);
-    background-color: var(--bg-color);
-    align-items: center;
-
-    gap: 10px;
-    align-items: center;
-
-    > button {
-      display: flex;
-      padding: 5px 0px;
-      border: none;
-    }
-
-    :last-child {
-      margin-left: auto;
-    }
-  `,
-  Questions: styled.div`
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-  `,
-};
+import { useData } from "../context/useData";
+import useAuth from "../context/useAuth";
 
 const App = () => {
+  const { username, setUsername } = useData();
   const { authState } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!authState) {
-      navigate("/login");
-    }
-  }, [authState, navigate]);
+    const fetchUsername = async () => {
+      const name = await getUsername(authState.user.id);
+      if (!name) {
+        setUsername("Error fetching username");
+        return;
+      }
+      setUsername(name);
+    };
+
+    fetchUsername();
+  }, [setUsername]);
 
   return (
-    <Container.Container>
-      <Container.Navbar>
-        <button onClick={() => window.location.reload()}>NERD-NECKING</button>
-        <button onClick={() => supabaseLogout()}>ANONYMOUS WALL</button>
-        <button onClick={() => supabaseLogout()}>LOGOUT</button>
-      </Container.Navbar>
-      <Container.Questions></Container.Questions>
-    </Container.Container>
+    <ProtectedRoute>
+      <AppListener>
+        <Container>
+          <Greeting>
+            <p>Hello goodmorning, {username}</p>
+            <p>Here are messages sent to you.</p>
+          </Greeting>
+          <Messages>
+            <MessagesList></MessagesList>
+          </Messages>
+          <Navbar
+            marginTop={0}
+            buttonItems={[
+              {
+                name: "Logout",
+                onClick: () => supabaseLogout(),
+              },
+              {
+                name: "Delete Account",
+                onClick: () => console.log("Delete Account Clicked"),
+              },
+            ]}
+          />
+        </Container>
+      </AppListener>
+    </ProtectedRoute>
   );
 };
 
 export default App;
+
+const Container = styled.div`
+  height: 100dvh;
+  padding-block: 8%;
+  display: flex;
+  flex-direction: column;
+`;
+const Messages = styled.div`
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+`;
+const Greeting = styled.div`
+  padding-block: 10px;
+  border-bottom: 1px solid var(--bd-color);
+`;
+
+const MessagesList = styled.ul`
+  padding-block: 30px;
+  overflow-y: scroll;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  width: 100%;
+  gap: 20px;
+`;

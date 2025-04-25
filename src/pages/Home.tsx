@@ -34,7 +34,6 @@ const Home = () => {
             "Send and receive anonymous messages with complete privacy. No
             tracking, no limits — just pure anonymity."
           </p>
-          <p>"Not even i can see your messages - Raiden"</p>
         </Container.Quotes>
         <Navbar
           navItems={[

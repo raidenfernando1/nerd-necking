@@ -29,4 +29,14 @@ input {
   outline: none;
   border: 1px solid var(--bd-color);
   color: inherit;
+  padding: 8px;
+}
+
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
 }
