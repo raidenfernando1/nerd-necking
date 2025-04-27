@@ -10,7 +10,6 @@ const AppListener: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   useEffect(() => {
     const isUsername = async () => {
       const response = await checkUsername(authState.user.id);
-      console.log(response);
 
       if (!response) {
         navigate("/create-username");

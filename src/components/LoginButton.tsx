@@ -20,7 +20,7 @@ const LoginButton: React.FC<{
         e.preventDefault();
         supabaseLogin(provider);
       }}>
-      <ComponentIcon />
+      {ComponentIcon && <ComponentIcon />}
       {name}
     </Button>
   );

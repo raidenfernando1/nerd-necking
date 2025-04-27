@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import ProtectedRoute from "../hooks/useRedirect";
+import ProtectedRoute from "../hooks/ProtectedRoute";
 import Navbar from "../components/Navbar";
 
 import { supabaseLogout, getUsername } from "../store/Supabase";

@@ -59,6 +59,9 @@ export const createUsername = async ({
   if (username.trim().length < 3) {
     return "Minimum of 3 characters for username.";
   }
+  if (username.includes(" ")) {
+    return "No spaces allowed please.";
+  }
 
   const { data, error } = await supabase.rpc("create_username", {
     username: username,

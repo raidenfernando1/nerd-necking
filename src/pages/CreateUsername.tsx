@@ -4,56 +4,72 @@ import { createUsername } from "../store/Supabase";
 import React, { useState } from "react";
 import useAuth from "../context/useAuth";
 import { useNavigate } from "react-router";
+import Spinner from "../hooks/HaveSpinner";
 
 const CreateUsername = () => {
-  const [username, setUsername] = useState("");
-  const [error, setError] = useState("");
+  const [username, setUsername] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { authState } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
+    setIsLoading(true);
+    setError("");
 
-    const response = await createUsername({
-      username: username,
-      user_id: authState.user.id,
-    });
+    try {
+      const response = await createUsername({
+        username: username,
+        user_id: authState.user.id,
+      });
 
-    if (response) {
-      return setError(response);
+      if (
+        response.includes("Error") ||
+        response.includes("No spaces allowed") ||
+        response.includes("Minimum of 3 characters")
+      ) {
+        setError(response);
+      } else {
+        setTimeout(() => {
+          navigate("/app");
+        }, 5000);
+      }
+    } finally {
+      setIsLoading(false);
     }
-
-    setTimeout(() => {
-      navigate("/app");
-    }, 5000);
   };
 
   return (
-    <CreateContainer>
-      <CreateWrapper onSubmit={handleSubmit}>
-        <div>
-          <p>Please create a username to continue.</p>
-          <ErrorMessage>{error}</ErrorMessage>
-        </div>
-        <input
-          placeholder="Your desired username."
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <ButtonContainer>
-          <button type="submit">Submit</button>
-          <button type="reset">Reset</button>
-        </ButtonContainer>
-      </CreateWrapper>
+    <>
+      <Spinner isLoading={isLoading}>
+        <CreateContainer>
+          <CreateWrapper onSubmit={handleSubmit}>
+            <div>
+              <p>Please create a username to continue.</p>
+              <ErrorMessage>{error}</ErrorMessage>
+            </div>
+            <input
+              placeholder="Enter your desired username."
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <ButtonContainer>
+              <button type="submit">Submit</button>
+              <button type="reset">Reset</button>
+            </ButtonContainer>
+          </CreateWrapper>
 
-      <Navbar
-        navItems={[
-          { name: "Exit", path: "/" },
-          { name: "Home", path: "/home" },
-          { name: "Contact", path: "/contact" },
-        ]}
-      />
-    </CreateContainer>
+          <Navbar
+            navItems={[
+              { name: "Exit", path: "/" },
+              { name: "Home", path: "/home" },
+              { name: "Contact", path: "/contact" },
+            ]}
+          />
+        </CreateContainer>
+      </Spinner>
+    </>
   );
 };
 
@@ -65,12 +81,6 @@ const CreateContainer = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: center;
-
-  h1 {
-    margin-bottom: 30px;
-    padding-block: 5px;
-    border-bottom: 1px solid var(--bd-color);
-  }
 
   @media (max-width: 700px) {
     width: 100%;
@@ -93,7 +103,7 @@ const ButtonContainer = styled.div`
 `;
 
 const ErrorMessage = styled.p`
-  padding-block: 3px;
+  padding-block: 10px;
   margin-top: 10px;
   border-top: 1px solid var(--bd-color);
 `;
