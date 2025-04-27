@@ -10,9 +10,13 @@ const ProtectedRoute: React.FC<{
 
   useEffect(() => {
     if (authState == null) {
-      navigateTo("/login");
+      navigateTo("/");
     }
   }, [authState, navigateTo]);
+
+  if (authState == null) {
+    return null;
+  }
 
   return <>{children}</>;
 };

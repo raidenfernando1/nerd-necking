@@ -4,7 +4,7 @@ import { createUsername } from "../store/Supabase";
 import React, { useState } from "react";
 import useAuth from "../context/useAuth";
 import { useNavigate } from "react-router";
-import Spinner from "../hooks/HaveSpinner";
+import Spinner from "../components/Spinner";
 
 const CreateUsername = () => {
   const [username, setUsername] = useState<string>("");
@@ -31,6 +31,7 @@ const CreateUsername = () => {
       ) {
         setError(response);
       } else {
+        setError(response);
         setTimeout(() => {
           navigate("/app");
         }, 5000);
