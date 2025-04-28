@@ -2,35 +2,25 @@ import styled from "styled-components";
 import ProtectedRoute from "../hooks/ProtectedRoute";
 import Navbar from "../components/Navbar";
 
-import { supabaseLogout, getUsername } from "../store/Supabase";
+import { supabaseLogout, fetchMessages } from "../store/Supabase";
 import AppListener from "../hooks/AppListener";
 import { useEffect } from "react";
-import { useData } from "../context/useData";
 import useAuth from "../context/useAuth";
+import { useData } from "../context/useData";
 
 const App = () => {
-  const { username, setUsername } = useData();
   const { authState } = useAuth();
-
-  useEffect(() => {
-    const fetchUsername = async () => {
-      const name = await getUsername(authState.user.id);
-      if (!name) {
-        setUsername("Error fetching username");
-        return;
-      }
-      setUsername(name);
-    };
-
-    fetchUsername();
-  }, [setUsername]);
+  const { username, receiverID } = useData();
 
   return (
     <ProtectedRoute>
       <AppListener>
         <Container>
+          <button onClick={() => fetchMessages({ receiver_id: receiverID })}>
+            test
+          </button>
           <Greeting>
-            <p>Hello goodmorning, {username}</p>
+            {username ? <p>Hello, {username}</p> : <p>Loading...</p>}
             <p>Here are messages sent to you.</p>
           </Greeting>
           <Messages>

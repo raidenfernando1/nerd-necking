@@ -23,8 +23,8 @@ export const supabaseLogin = async (
   }
 };
 
-export const getUsername = async (auth_id: string): Promise<string | null> => {
-  const { data, error } = await supabase.rpc("get_username", {
+export const getUsername = async ({ auth_id }: { auth_id: string }) => {
+  const { data, error } = await supabase.rpc("get_user_data", {
     auth_id: auth_id,
   });
 
@@ -82,4 +82,22 @@ export const createUsername = async ({
 export const supabaseLogout = async (): Promise<string> => {
   const { error } = await supabase.auth.signOut();
   return !error ? "Logout sucessfully" : "Logout error: " + error;
+};
+
+export const fetchMessages = async ({
+  receiver_id,
+}: {
+  receiver_id: string;
+}) => {
+  const { data, error } = await supabase.rpc("fetch_messages", {
+    input_receiver_id: receiver_id,
+  });
+
+  if (error) {
+    console.error("ERROR: ", error);
+    return null;
+  } else {
+    console.log("Fetched data: ", data);
+    return data;
+  }
 };
