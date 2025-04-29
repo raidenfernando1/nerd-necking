@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+
 export const supabase = createClient(
   "https://udcvdhvicqbycucelyjs.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVkY3ZkaHZpY3FieWN1Y2VseWpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM0NDYyNzMsImV4cCI6MjA1OTAyMjI3M30.DbEBi5uHSLKbY_ulzNHPGuex7xLcfvQt10Eg8VbeSbY",
@@ -84,20 +85,44 @@ export const supabaseLogout = async (): Promise<string> => {
   return !error ? "Logout sucessfully" : "Logout error: " + error;
 };
 
+export const countMessages = async ({
+  receiver_id,
+}: {
+  receiver_id: string;
+}) => {
+  try {
+    const { data, error } = await supabase.rpc("count_messages", {
+      receiver: receiver_id,
+    });
+
+    if (error) {
+      console.error("ERROR FETCHING MESSAGE COUNT:", error.message);
+      return null;
+    }
+    return data;
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    return null;
+  }
+};
+
 export const fetchMessages = async ({
   receiver_id,
 }: {
   receiver_id: string;
 }) => {
-  const { data, error } = await supabase.rpc("fetch_messages", {
-    input_receiver_id: receiver_id,
-  });
-
-  if (error) {
-    console.error("ERROR: ", error);
-    return null;
-  } else {
-    console.log("Fetched data: ", data);
+  try {
+    const { data, error } = await supabase.rpc("fetch_messages", {
+      receiver: receiver_id,
+    });
+    if (error) {
+      console.error("ERROR FETCHING MESSAGE COUNT:", error.message);
+      return null;
+    }
+    console.log(data);
     return data;
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    return null;
   }
 };

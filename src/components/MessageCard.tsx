@@ -14,20 +14,32 @@ const Container = styled.div`
   }
 `;
 
-const MessageAction = styled.button`
-  margin-top: 10px;
-  padding: 4px 8px;
+const MessageDetails = styled.div`
+  border-top: 1px solid var(--bd-color);
+  padding-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
 `;
 
-const MessageCard: React.FC<{ message: string; id?: string }> = ({
+const ShareBTN = styled.button`
+  padding: 5px 10px;
+`;
+
+const MessageCard: React.FC<{ message: string; timestamp: string }> = ({
   message,
+  timestamp,
 }) => {
+  const formattedTimestamp = new Date(timestamp).toLocaleString();
+
   return (
     <Container>
-      <p>{message}</p>
-      <MessageAction>
-        <p>Share</p>
-      </MessageAction>
+      {!message ? <p>Cant fetch message</p> : <p>{message}</p>}
+      <MessageDetails>
+        {!timestamp ? <p>No time available</p> : <p>{formattedTimestamp}</p>}
+        <ShareBTN>Share</ShareBTN>
+      </MessageDetails>
     </Container>
   );
 };

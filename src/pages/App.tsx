@@ -1,30 +1,33 @@
 import styled from "styled-components";
 import ProtectedRoute from "../hooks/ProtectedRoute";
 import Navbar from "../components/Navbar";
+import MessageCard from "../components/MessageCard";
 
-import { supabaseLogout, fetchMessages } from "../store/Supabase";
+import { supabaseLogout } from "../store/Supabase";
 import AppListener from "../hooks/AppListener";
-import { useEffect } from "react";
-import useAuth from "../context/useAuth";
 import { useData } from "../context/useData";
-
 const App = () => {
-  const { authState } = useAuth();
-  const { username, receiverID } = useData();
+  const { username, inboxCount, messages } = useData();
 
   return (
     <ProtectedRoute>
       <AppListener>
         <Container>
-          <button onClick={() => fetchMessages({ receiver_id: receiverID })}>
-            test
-          </button>
           <Greeting>
             {username ? <p>Hello, {username}</p> : <p>Loading...</p>}
-            <p>Here are messages sent to you.</p>
+            <p>Here are messages sent to you. | Message Count: {inboxCount}</p>
           </Greeting>
           <Messages>
-            <MessagesList></MessagesList>
+            <MessagesList>
+              {messages.map((message) => {
+                return (
+                  <MessageCard
+                    message={message.message_content}
+                    timestamp={message.timestamp}
+                  />
+                );
+              })}
+            </MessagesList>
           </Messages>
           <Navbar
             marginTop={0}
@@ -55,7 +58,6 @@ const Container = styled.div`
 `;
 const Messages = styled.div`
   flex: 1;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
 `;
