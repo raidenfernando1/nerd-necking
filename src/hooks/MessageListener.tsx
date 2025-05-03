@@ -19,9 +19,10 @@ const MessageListener: React.FC<{
     if (routeUsername === undefined) return;
 
     const initAnonUser = async () => {
-      const useData = await anonGetUserData({ username: routeUsername });
+      const userData = await anonGetUserData({ username: routeUsername });
+      console.log("User data received:", userData); // For debugging
 
-      if (useData["error"]) {
+      if (userData["error"]) {
         setError("This username doesn't exist.");
         isPassed(false);
         setLoading(false);
@@ -31,11 +32,10 @@ const MessageListener: React.FC<{
       try {
         setAnonUserData({
           anonUserData: {
-            username: useData.username,
-            receiverID: useData.receiverID,
+            username: userData.username,
+            receiverID: userData.receiver_id, // This is the key change
           },
         });
-
         setLoading(false);
         isPassed(true);
       } catch (error) {

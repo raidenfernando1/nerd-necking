@@ -5,6 +5,10 @@ interface UserDataType {
 }
 
 interface AnonUserType {
+  anonUserData: {
+    username: string;
+    receiverID: string;
+  };
   setAnonUserData: (partial: Partial<UserDataType>) => void;
 }
 
