@@ -1,15 +1,9 @@
 import { useParams } from "react-router";
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
-import {
-  anonCheckUsername,
-  anonGetUserData,
-  sendMessage,
-} from "../store/Supabase";
-import { useEffect, useState } from "react";
-import MessageListener from "../hooks/MessageListener";
 
-// TODO: SEND MESSAGE FEATURE
+import { useState } from "react";
+import MessageListener from "../hooks/MessageListener";
 
 const Message = () => {
   const { username } = useParams();

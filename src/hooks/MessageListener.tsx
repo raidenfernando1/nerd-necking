@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import { useNavigate } from "react-router";
 import Spinner from "../components/Spinner";
 import { anonGetUserData } from "../store/Supabase";
