@@ -7,19 +7,30 @@ import { supabaseLogout } from "../store/Supabase";
 import AppListener from "../hooks/AppListener";
 import { useData } from "../context/useData";
 const App = () => {
-  const { username, inboxCount, messages } = useData();
+  const { userData } = useData();
 
   return (
     <ProtectedRoute>
       <AppListener>
         <Container>
           <Greeting>
-            {username ? <p>Hello, {username}</p> : <p>Loading...</p>}
-            <p>Here are messages sent to you. | Message Count: {inboxCount}</p>
+            {userData.user.username ? (
+              <p>Hello, {userData.user.username}</p>
+            ) : (
+              <p>Loading...</p>
+            )}
+            {userData.inboxCount ? (
+              <p>
+                Here are messages sent to you. | Message Count:{" "}
+                {userData.inboxCount}
+              </p>
+            ) : (
+              <p>Loading...</p>
+            )}
           </Greeting>
           <Messages>
             <MessagesList>
-              {messages.map((message) => {
+              {userData.messages.map((message) => {
                 return (
                   <MessageCard
                     message={message.message_content}
@@ -60,6 +71,7 @@ const Messages = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
 `;
 const Greeting = styled.div`
   padding-block: 10px;
@@ -68,9 +80,7 @@ const Greeting = styled.div`
 
 const MessagesList = styled.ul`
   padding-block: 30px;
-  overflow-y: scroll;
+  gap: 10px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  width: 100%;
-  gap: 20px;
 `;

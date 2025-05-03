@@ -12,7 +12,7 @@ interface ButtonItem {
   onClick: () => void;
 }
 
-interface NavbarProps {
+interface NavbarStruct {
   navItems?: NavbarItem[];
   buttonItems?: ButtonItem[];
   marginTop?: number;
@@ -39,7 +39,7 @@ const Container = styled.nav`
   }
 `;
 
-const Navbar: React.FC<NavbarProps> = ({
+const Navbar: React.FC<NavbarStruct> = ({
   navItems,
   buttonItems,
   marginTop = 50,

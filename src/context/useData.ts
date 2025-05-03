@@ -5,24 +5,28 @@ interface MessagesType {
   timestamp: string;
 }
 
-interface AppDataTypes {
-  username: string;
+interface UserDataType {
+  user: { username: string; receiver_id: string };
   messages: MessagesType[];
-  receiverID: string;
   inboxCount: number | null;
-  setUsername: (username: string) => void;
-  setMessages: (messages: MessagesType[]) => void;
-  setReceiverID: (receiverID: string) => void;
-  setInboxCount: (count: number) => void;
+}
+
+interface AppDataTypes {
+  userData: UserDataType;
+  setUserData: (partial: Partial<UserDataType>) => void;
 }
 
 export const useData = create<AppDataTypes>((set) => ({
-  username: "",
-  messages: [],
-  receiverID: "",
-  inboxCount: null,
-  setUsername: (username) => set({ username: username }),
-  setMessages: (newMessages) => set({ messages: newMessages }),
-  setReceiverID: (receiverID) => set({ receiverID: receiverID }),
-  setInboxCount: (count) => set({ inboxCount: count }),
+  userData: {
+    user: { username: "", receiver_id: "" },
+    messages: [],
+    inboxCount: null,
+  },
+  setUserData: (partial) =>
+    set((state) => ({
+      userData: {
+        ...state.userData,
+        ...partial,
+      },
+    })),
 }));

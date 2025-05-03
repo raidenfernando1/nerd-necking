@@ -30,8 +30,7 @@ export const getUsername = async ({ auth_id }: { auth_id: string }) => {
   });
 
   if (error) {
-    console.error(`Something has gone awry. ${error}`);
-    return null;
+    return "Failed to fetch username.";
   }
 
   return data;
@@ -112,17 +111,59 @@ export const fetchMessages = async ({
   receiver_id: string;
 }) => {
   try {
-    const { data, error } = await supabase.rpc("fetch_messages", {
+    const { data } = await supabase.rpc("fetch_messages", {
       receiver: receiver_id,
     });
-    if (error) {
-      console.error("ERROR FETCHING MESSAGE COUNT:", error.message);
-      return null;
-    }
-    console.log(data);
     return data;
   } catch (err) {
-    console.error("Unexpected error:", err);
-    return null;
+    return "Error fetching messages";
   }
+};
+
+export const anonCheckUsername = async ({
+  inputUsername,
+}: {
+  inputUsername: string;
+}) => {
+  if (inputUsername == undefined) {
+    return "Route cant be empty";
+  }
+
+  try {
+    const { data } = await supabase.rpc("anon_check_username", {
+      input_username: inputUsername,
+    });
+
+    return data;
+  } catch (err) {
+    return "Error fetching messages";
+  }
+};
+
+export const sendMessage = async ({
+  message,
+  receiver_id,
+}: {
+  message: string;
+  receiver_id: string;
+}) => {
+  const { data, error } = await supabase
+    .from("user_messages")
+    .insert([{ message_content: message, receiver_id: receiver_id }])
+    .select();
+
+  if (error) {
+    console.error("Error inserting message:", error);
+    throw error;
+  }
+
+  return data;
+};
+
+export const anonGetUserData = async ({ username }: { username: string }) => {
+  const { data } = await supabase.rpc("anon_get_user_data", {
+    input_username: username,
+  });
+
+  return data;
 };

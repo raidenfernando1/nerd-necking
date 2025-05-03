@@ -1,0 +1,22 @@
+import { create } from "zustand";
+
+interface UserDataType {
+  anonUserData: { username: string; receiverID: string };
+}
+
+interface AnonUserType {
+  setAnonUserData: (partial: Partial<UserDataType>) => void;
+}
+
+export const useAnonData = create<AnonUserType>((set) => ({
+  anonUserData: {
+    username: "",
+    receiverID: "",
+  },
+
+  setAnonUserData: (partial) =>
+    set((state) => ({
+      ...state,
+      ...partial,
+    })),
+}));

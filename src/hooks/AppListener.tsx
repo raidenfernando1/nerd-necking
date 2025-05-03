@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useAuth from "../context/useAuth";
 import {
   checkUsername,
@@ -8,96 +8,66 @@ import {
 } from "../store/Supabase";
 import { useNavigate } from "react-router";
 import { useData } from "../context/useData";
+import Spinner from "../components/Spinner";
 
 const AppListener: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { authState } = useAuth();
-  const { receiverID, setUsername, setReceiverID, setInboxCount, setMessages } =
-    useData();
+  const { setUserData } = useData();
 
-  // TODO: this Listener HOC is growing too big.
-  // FIX LATER: make the calls as custom hooks and call as a single sideeffect.
+  const fetchUsername = async () => {
+    let username = "";
+    let receiver_id = "";
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const userData = await getUsername({ auth_id: authState.user.id });
-        if (userData) {
-          setUsername(userData.username);
-          setReceiverID(userData.receiver_id);
-        } else {
-          console.error("User data not found.");
-        }
-      } catch (error) {
-        console.error("Error fetching user data: " + error);
-      }
-    };
+    const response = await getUsername({
+      auth_id: authState.user.id,
+    });
 
-    if (authState.user.id) {
-      getData();
+    if (response) {
+      username = response.username;
+      receiver_id = response.receiver_id;
     }
-  }, []);
+
+    return { username, receiver_id };
+  };
 
   useEffect(() => {
-    const getMesssageCount = async () => {
-      try {
-        const messageCount = await countMessages({ receiver_id: receiverID });
-        setInboxCount(messageCount);
-      } catch (error) {
-        console.error("CATCH ERROR: " + error);
+    const initUser = async () => {
+      const userData = await fetchUsername();
+
+      if (!(await checkUsername(authState.user.id))) {
+        navigate("/create-username");
+        return;
       }
-    };
-    if (receiverID) {
-      getMesssageCount();
-    }
-  }, []);
-
-  useEffect(() => {
-    const isUsername = async () => {
-      try {
-        const response = await checkUsername(authState.user.id);
-        if (!response) {
-          navigate("/create-username");
-        }
-      } catch (error) {
-        console.error("Error checking username: " + error);
-      }
-    };
-
-    if (authState.user.id) {
-      isUsername();
-    }
-  }, [authState.user.id, navigate]);
-
-  // --- NEW EFFECT: Fetch all messages ---
-  useEffect(() => {
-    const getAllMessages = async () => {
-      if (!receiverID) return; // Don't fetch if we don't have the ID
 
       try {
-        console.log(`Fetching messages for receiverID: ${receiverID}`); // Debug log
-        const fetchedMessages = await fetchMessages({
-          receiver_id: receiverID,
+        setUserData({
+          user: {
+            username: userData.username,
+            receiver_id: userData.receiver_id,
+          },
+          inboxCount: await countMessages({
+            receiver_id: userData.receiver_id,
+          }),
+          messages: await fetchMessages({
+            receiver_id: userData.receiver_id,
+          }),
         });
 
-        if (fetchedMessages) {
-          // Assuming fetchMessages returns MessagesType[] or null/undefined
-          console.log(`Fetched ${fetchedMessages.length} messages.`); // Debug log
-          setMessages(fetchedMessages); // Update the store
-        } else {
-          console.log("No messages found or fetch returned null/undefined."); // Debug log
-          setMessages([]); // Set to empty array if no messages
-        }
+        setLoading(false);
       } catch (error) {
-        console.error("Error fetching messages: ", error);
-        setMessages([]); // Set to empty array on error
+        alert(error instanceof Error ? error.message : "An error occurred");
+        setLoading(false);
+      } finally {
+        setLoading(false);
       }
     };
 
-    getAllMessages();
-  }, [receiverID, setMessages]); // Depend on receiverID and the setter function
+    initUser();
+  }, []);
 
-  return <>{children}</>;
+  return <Spinner isLoading={loading}>{children}</Spinner>;
 };
 
 export default AppListener;
