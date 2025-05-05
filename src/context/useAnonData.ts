@@ -3,7 +3,6 @@ import { create } from "zustand";
 interface UserDataType {
   anonUserData: { username: string; receiverID: string };
 }
-
 interface AnonUserType {
   anonUserData: {
     username: string;
