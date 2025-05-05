@@ -98,7 +98,7 @@ const Message = () => {
       routeUsername={username}
       isPassed={(msg: boolean) => setError(msg)}>
       <Container>
-        {error ? (
+        {!error ? (
           <p>Username: {username} doesn't exist.</p>
         ) : (
           <p>Username: {username} exists.</p>
