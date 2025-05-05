@@ -9,11 +9,7 @@ const Login = () => {
       <LoginContainer>
         <h1>LOGIN NOW</h1>
         <InputFields>
-          <LoginButton
-            provider="google"
-            icon="google"
-            name="Login / Sign up with google."
-          />
+          <LoginButton provider="google" icon="google" name="Google" />
         </InputFields>
         <Navbar
           navItems={[
