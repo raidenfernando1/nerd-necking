@@ -120,6 +120,25 @@ export const fetchMessages = async ({
   }
 };
 
+export const deleteUser = async () => {
+  try {
+    const { data, error } = await supabase.rpc("delete_user_account");
+
+    if (error) {
+      console.error("Error deleting user:", error.message);
+      throw new Error("Could not delete user. Please try again later.");
+    }
+
+    await supabase.auth.signOut();
+
+    localStorage.clear();
+
+    return { success: true, data };
+  } catch (err: any) {
+    console.error("Unexpected error during account deletion:", err.message);
+    throw new Error("Server error during account deletion.");
+  }
+};
 export const anonCheckUsername = async ({
   inputUsername,
 }: {

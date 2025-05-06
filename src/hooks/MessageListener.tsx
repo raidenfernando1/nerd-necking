@@ -20,7 +20,6 @@ const MessageListener: React.FC<{
 
     const initAnonUser = async () => {
       const userData = await anonGetUserData({ username: routeUsername });
-      console.log("User data received:", userData); // For debugging
 
       if (userData["error"]) {
         setError("This username doesn't exist.");
