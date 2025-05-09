@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "Lora";
+  src: url("../public/fonts/Lora.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+}
+
 :root {
   --font-color: rgb(180, 180, 180);
   --bg-color: rgb(20, 20, 20);

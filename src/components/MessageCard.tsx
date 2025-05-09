@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import { useShare } from "../context/useShare";
+import { useNavigate } from "react-router";
 
 const Container = styled.div`
   border: 1px solid var(--bd-color);
@@ -32,13 +34,21 @@ const MessageCard: React.FC<{ message: string; timestamp: string }> = ({
   timestamp,
 }) => {
   const formattedTimestamp = new Date(timestamp).toLocaleString();
+  const { setMessage } = useShare();
+  const navigateTo = useNavigate();
 
   return (
     <Container>
       {!message ? <p>Cant fetch message</p> : <p>{message}</p>}
       <MessageDetails>
         {!timestamp ? <p>No time available</p> : <p>{formattedTimestamp}</p>}
-        <ShareBTN>Share</ShareBTN>
+        <ShareBTN
+          onClick={() => {
+            setMessage(message);
+            navigateTo("/send-message");
+          }}>
+          Share
+        </ShareBTN>
       </MessageDetails>
     </Container>
   );

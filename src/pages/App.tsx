@@ -18,80 +18,82 @@ const App = () => {
   const [error, setError] = useState("");
 
   return (
-    <ProtectedRoute>
-      <AppListener>
-        <p>{error}</p>
-        {confirmDelete && (
-          <ConfirmPopup
-            isOpen={true}
-            onConfirm={async (confirmed) => {
-              if (confirmed) {
-                try {
-                  const result = await deleteUser();
-                  if (result.success) {
-                    navigateTo("/");
+    <>
+      <ProtectedRoute>
+        <AppListener>
+          <p>{error}</p>
+          {confirmDelete && (
+            <ConfirmPopup
+              isOpen={true}
+              onConfirm={async (confirmed) => {
+                if (confirmed) {
+                  try {
+                    const result = await deleteUser();
+                    if (result.success) {
+                      navigateTo("/");
+                    }
+                  } catch (err) {
+                    setError(
+                      "An error occurred while deleting your account. Please try again."
+                    );
+                    console.error("Error deleting account:", err);
                   }
-                } catch (err) {
-                  setError(
-                    "An error occurred while deleting your account. Please try again."
-                  );
-                  console.error("Error deleting account:", err);
                 }
-              }
 
-              setConfirmDelete(false);
-            }}
-          />
-        )}
+                setConfirmDelete(false);
+              }}
+            />
+          )}
 
-        <Container>
-          <Greeting>
-            {userData.user.username ? (
-              <p>Hello, {userData.user.username}</p>
-            ) : (
-              <p>Loading...</p>
-            )}
-            {userData.inboxCount || userData.inboxCount == 0 ? (
-              <p>
-                Here are messages sent to you. | Message Count:
-                {userData.inboxCount}
-              </p>
-            ) : (
-              <p>Loading...</p>
-            )}
-          </Greeting>
-          <Messages>
-            <MessagesList>
-              {userData.messages === null ? (
-                <p>Empty inbox</p>
+          <Container>
+            <Greeting>
+              {userData.user.username ? (
+                <p>Hello, {userData.user.username}</p>
               ) : (
-                userData.messages.map((message) => {
-                  return (
-                    <MessageCard
-                      message={message.message_content}
-                      timestamp={message.timestamp}
-                    />
-                  );
-                })
+                <p>Loading...</p>
               )}
-            </MessagesList>
-          </Messages>
-          <Navbar
-            marginTop={0}
-            buttonItems={[
-              {
-                name: "Logout",
-                onClick: () => supabaseLogout(),
-              },
-              {
-                name: "Delete Account",
-                onClick: () => setConfirmDelete(true),
-              },
-            ]}
-          />
-        </Container>
-      </AppListener>
-    </ProtectedRoute>
+              {userData.inboxCount || userData.inboxCount == 0 ? (
+                <p>
+                  Here are messages sent to you. | Message Count:
+                  {userData.inboxCount}
+                </p>
+              ) : (
+                <p>Loading...</p>
+              )}
+            </Greeting>
+            <Messages>
+              <MessagesList>
+                {userData.messages === null ? (
+                  <p>Empty inbox</p>
+                ) : (
+                  userData.messages.map((message) => {
+                    return (
+                      <MessageCard
+                        message={message.message_content}
+                        timestamp={message.timestamp}
+                      />
+                    );
+                  })
+                )}
+              </MessagesList>
+            </Messages>
+            <Navbar
+              marginTop={0}
+              buttonItems={[
+                {
+                  name: "Logout",
+                  onClick: () => supabaseLogout(),
+                },
+                {
+                  name: "Delete Account",
+                  onClick: () => setConfirmDelete(true),
+                },
+              ]}
+            />
+          </Container>
+        </AppListener>
+      </ProtectedRoute>
+    </>
   );
 };
 
