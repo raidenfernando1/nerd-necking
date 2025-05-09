@@ -37,8 +37,6 @@ const App = () => {
                   );
                   console.error("Error deleting account:", err);
                 }
-              } else {
-                console.log("Cancelled.");
               }
 
               setConfirmDelete(false);
