@@ -1,11 +1,11 @@
 import { create } from "zustand";
 
-interface ShareImageTypes {
-  message: string;
-  setMessage: (newMessage: string) => void;
+interface ShareTypes {
+  shareMessage: string;
+  setShareMessage: (newMessage: string) => void;
 }
 
-export const useShare = create<ShareImageTypes>((set) => ({
-  message: "",
-  setMessage: (newMessage: string) => set({ message: newMessage }),
+export const useShare = create<ShareTypes>((set) => ({
+  shareMessage: "",
+  setShareMessage: (newMessage: string) => set({ shareMessage: newMessage }),
 }));

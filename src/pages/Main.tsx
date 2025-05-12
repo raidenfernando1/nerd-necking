@@ -5,18 +5,18 @@ import Safety from "./Safety";
 import About from "./About";
 import App from "./App";
 import Message from "./Message";
-import ShareImage from "../hooks/ShareImage";
+import { useShare } from "../context/useShare";
 
 import { useEffect } from "react";
 import { Routes, Route } from "react-router";
 import { supabase } from "../store/Supabase";
 import useAuth from "../context/useAuth";
 import CreateUsername from "./CreateUsername";
-import { useShare } from "../context/useShare";
+import Share from "./Share";
 
 const Main = () => {
   const { setAuthState } = useAuth();
-  const { message } = useShare();
+  const { shareMessage } = useShare();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -33,7 +33,7 @@ const Main = () => {
   }, []);
 
   return (
-    <Container.Layout>
+    <Container>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -43,21 +43,19 @@ const Main = () => {
         <Route path="/create-username" element={<CreateUsername />} />
         <Route path="/:username" element={<Message />} />
         <Route
-          path="/send-message"
-          element={<ShareImage message={message} />}
+          path="/share-message"
+          element={<Share message={shareMessage} />}
         />
       </Routes>
-    </Container.Layout>
+    </Container>
   );
 };
 
-const Container = {
-  Layout: styled.main`
-    height: 100%;
-    color: var(--font-color);
-    background-color: var(--bg-color);
-    padding-inline: 10%;
-  `,
-};
+const Container = styled.div`
+  height: 100%;
+  color: var(--font-color);
+  background-color: var(--bg-color);
+  padding-inline: 10%;
+`;
 
 export default Main;
