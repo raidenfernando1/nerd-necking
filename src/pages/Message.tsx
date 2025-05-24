@@ -59,6 +59,11 @@ const Message = () => {
       return;
     }
 
+    if (message.trim().length > 10) {
+      setSendError("Message too long!");
+      return;
+    }
+
     if (cooldown) {
       setSendError(
         `Please wait ${cooldownTime} seconds before sending another message`
